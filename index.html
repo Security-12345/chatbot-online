@@ -1,886 +1,743 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Permit Records Management</title>
-    <!-- Link to your CSS file -->
-    <link rel="stylesheet" href="style.css"> <!-- Add this line -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rainbow Village</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" as="style">
+  <style>
+    /* Reset and Typography */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'SF Pro Display', 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      background: linear-gradient(120deg, #e8ecef, #d1d9e6);
+      color: #1d1d1f;
+      line-height: 1.5;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Header */
+    .header {
+      background: rgba(242, 242, 242, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 0.8rem 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .header-content {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 36px;
+      height: 12px;
+      background: 
+        radial-gradient(circle at 6px 6px, #ff453a 5px, transparent 6px),
+        radial-gradient(circle at 18px 6px, #ff9f0a 5px, transparent 6px),
+        radial-gradient(circle at 30px 6px, #32d74b 5px, transparent 6px);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      margin-left: 3rem;
+      touch-action: manipulation;
+    }
+
+    .logo i {
+      font-size: 1.5rem;
+      color: #1d1d1f;
+      margin-right: 0.5rem;
+      transition: transform 0.2s ease;
+    }
+
+    .logo i:active {
+      transform: scale(1.1);
+    }
+
+    h1 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #1d1d1f;
+    }
+
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.6rem;
+      color: #1d1d1f;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    .nav-menu {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .nav-menu button {
+      background: rgba(255, 255, 255, 0.6);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      padding: 0.4rem 0.8rem;
+      color: #1d1d1f;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+      touch-action: manipulation;
+    }
+
+    .nav-menu button:active {
+      background: #007aff;
+      color: #fff;
+      box-shadow: 0 2px 6px rgba(0, 122, 255, 0.3);
+    }
+
+    /* Main Content */
+    main {
+      min-height: calc(100vh - 60px);
+    }
+
+    .section {
+      padding: 1rem;
+      opacity: 0;
+      animation: slideIn 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) forwards;
+    }
+
+    .section.hidden {
+      display: none;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 12px;
+      padding: 1rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      color: #1d1d1f;
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+    }
+
+    p {
+      color: #6e6e73;
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+
+    /* Rules Container */
+    .rules-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .rule-section {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      transition: all 0.2s ease;
+    }
+
+    .rule-section:active {
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .rule-section h3 {
+      font-size: 1.1rem;
+      color: #1d1d1f;
+      background: rgba(245, 245, 245, 0.8);
+      padding: 0.8rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      touch-action: manipulation;
+    }
+
+    .rule-section h3 i {
+      font-size: 0.8rem;
+      color: #007aff;
+      transition: transform 0.2s ease;
+    }
+
+    .rule-section h3:active i {
+      transform: rotate(180deg);
+    }
+
+    .rule-content {
+      padding: 0.8rem;
+      font-size: 0.9rem;
+      color: #6e6e73;
+    }
+
+    .rule-content h4 {
+      font-size: 1rem;
+      color: #1d1d1f;
+      margin: 0.5rem 0 0.3rem;
+    }
+
+    .rule-content ul, .rule-content ol {
+      margin-left: 1.2rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .rule-content li {
+      margin-bottom: 0.3rem;
+    }
+
+    .rule-content strong {
+      color: #007aff;
+    }
+
+    /* Buttons */
+    .btn-primary {
+      background: #007aff;
+      color: #fff;
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      touch-action: manipulation;
+    }
+
+    .btn-primary:active {
+      background: #005bb5;
+      box-shadow: 0 2px 8px rgba(0, 91, 181, 0.3);
+    }
+
+    .permit-actions {
+      display: flex;
+      justify-content: center;
+      gap: 0.8rem;
+      margin-top: 1rem;
+    }
+
+    /* Modal */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 20;
+      padding: 1rem;
+    }
+
+    .modal-content {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 1rem;
+      border-radius: 14px;
+      width: 100%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+      animation: modalIn 0.3s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+    }
+
+    @keyframes modalIn {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.8rem;
+    }
+
+    .modal-header h2 {
+      font-size: 1.3rem;
+      color: #1d1d1f;
+      font-weight: 600;
+    }
+
+    .modal-header button {
+      background: none;
+      border: none;
+      font-size: 1.1rem;
+      color: #6e6e73;
+      cursor: pointer;
+      transition: color 0.2s ease;
+      touch-action: manipulation;
+    }
+
+    .modal-header button:active {
+      color: #ff453a;
+    }
+
+    .modal-body p, .modal-body li {
+      font-size: 0.9rem;
+      color: #6e6e73;
+      margin-bottom: 0.6rem;
+    }
+
+    .modal-body ul {
+      margin-left: 1.2rem;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 1rem;
+      right: 1rem;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      color: #fff;
+      font-size: 0.85rem;
+      z-index: 30;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .toast.success {
+      background: #32d74b;
+    }
+
+    .toast.error {
+      background: #ff453a;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* Mobile Optimization */
+    @media (max-width: 768px) {
+      .header-content {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .header::before {
+        left: 0.5rem;
+      }
+
+      .logo {
+        margin-left: 2.5rem;
+      }
+
+      .nav-toggle {
+        display: block;
+      }
+
+      .nav-menu {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        position: absolute;
+        top: 100%;
+        left: 0;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        padding: 0.5rem;
+      }
+
+      .nav-menu.active {
+        display: flex;
+      }
+
+      .nav-menu button {
+        width: 100%;
+        text-align: left;
+        padding: 0.7rem;
+        font-size: 1rem;
+      }
+
+      .section {
+        padding: 0.8rem;
+      }
+
+      h1 {
+        font-size: 1.1rem;
+      }
+
+      h2 {
+        font-size: 1.3rem;
+      }
+
+      .container {
+        padding: 0.8rem;
+      }
+
+      .rule-section h3 {
+        font-size: 1rem;
+        padding: 0.7rem;
+      }
+
+      .rule-content {
+        padding: 0.7rem;
+        font-size: 0.85rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .header {
+        padding: 0.6rem;
+      }
+
+      .logo {
+        margin-left: 2rem;
+      }
+
+      .logo i {
+        font-size: 1.2rem;
+      }
+
+      h1 {
+        font-size: 1rem;
+      }
+
+      .nav-toggle {
+        font-size: 1.4rem;
+      }
+
+      .btn-primary {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+      }
+
+      .rule-content {
+        padding: 0.6rem;
+        font-size: 0.8rem;
+      }
+
+      .modal-content {
+        padding: 0.8rem;
+        max-width: 95%;
+      }
+
+      .modal-header h2 {
+        font-size: 1.1rem;
+      }
+
+      .modal-body p, .modal-body li {
+        font-size: 0.85rem;
+      }
+
+      .toast {
+        bottom: 0.5rem;
+        right: 0.5rem;
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+      }
+    }
+  </style>
 </head>
-
 <body>
-    <div id="app">
-        <h1>Permit Records Management</h1>
+  <header class="header">
+    <div class="header-content">
+      <div class="logo">
+        <i class="fas fa-home"></i>
+        <h1>Rainbow Village</h1>
+      </div>
+      <button class="nav-toggle" onclick="toggleNav()">☰</button>
+      <nav class="nav-menu">
+        <button onclick="window.location.href='index.html'">Permits</button>
+        <button onclick="showSection('rules')">Rules</button>
+        <button onclick="openModal('about')">About</button>
+        <button onclick="openModal('contacts')">Contacts</button>
+      </nav>
+    </div>
+  </header>
 
-        <!-- Permit Form -->
-        <form id="permit-form">
-    <div class="permit-card">
-        <h2>Parking Permit</h2>
-        <div class="permit-details">
-            <!-- Unit Number -->
-            <div class="field">
-                <label for="unit-number">Unit Number:</label>
-                <input type="text" id="unit-number" required>
+  <main>
+    <section id="rules" class="section active">
+      <div class="container">
+        <h2>Community Rules & Information</h2>
+        <p>Guidelines for a harmonious Rainbow Village</p>
+        <div class="rules-container">
+          <div class="rule-section">
+            <h3 onclick="toggleRule(this)">Coronavirus Guidelines <i class="fas fa-chevron-down"></i></h3>
+            <div class="rule-content">
+              <ul>
+                <li><strong>Symptom Monitoring:</strong> Watch for fever, cough, shortness of breath, sore throat, difficulty breathing, or loss of taste/smell.</li>
+                <li><strong>Self-Isolation:</strong> Self-isolate if sick after travel or exposure; seek medical care if symptoms worsen.</li>
+                <li><strong>Protective Measures:</strong> Wash hands frequently, avoid touching face, cough into elbow.</li>
+                <li><strong>Travel Restrictions:</strong> Self-isolate for 14 days after returning from outside Canada; seek medical care if needed.</li>
+                <li><strong>Emergency Contact:</strong> Toronto Public Health (416-392-1250) or a medical practitioner.</li>
+              </ul>
             </div>
-            
-            <!-- Visitor Name -->
-            <div class="field">
-                <label for="visitor-name">Visitor Name:</label>
-                <input type="text" id="visitor-name" required>
-            </div>
-            
-            <!-- License Plate No -->
-            <div class="field">
-                <label for="license-plate-no">License Plate No:</label>
-                <input type="text" id="license-plate-no" required>
-            </div>
-            
-            <!-- Officer Name -->
-            <div class="field">
-                <label for="officer-name">Officer Name:</label>
-                <select id="officer-name" required>
-                    <option value="">Select Officer</option>
-                    <option value="JAGROOP">JAGROOP</option>
-                    <option value="MELBIN">MELBIN</option>
-                    <option value="KARTIK">KARTIK</option>
-                    <option value="ABIY">ABIY</option>
-                    <option value="KARAN">KARAN</option>
-                    <option value="DANIYAL">DANIYAL</option>
-                    <option value="ZAMIL">ZAMIL</option>
-                </select>
-            </div>
+          </div>
 
-            <!-- Vehicle Make -->
-            <div class="field">
-                <label for="vehicle-make">Vehicle Make:</label>
-                <select id="vehicle-make" required>
-                    <option value="">Select Vehicle Make</option>
-                    <option value="Acura">Acura</option>
-<option value="Alfa Romeo">Alfa Romeo</option>
-<option value="Aston Martin">Aston Martin</option>
-<option value="Audi">Audi</option>
-<option value="Bentley">Bentley</option>
-<option value="BMW">BMW</option>
-<option value="Buick">Buick</option>
-<option value="Cadillac">Cadillac</option>
-<option value="Chevrolet">Chevrolet</option>
-<option value="Chrysler">Chrysler</option>
-<option value="Dodge">Dodge</option>
-<option value="Ferrari">Ferrari</option>
-<option value="Fiat">Fiat</option>
-<option value="Ford">Ford</option>
-<option value="Genesis">Genesis</option>
-<option value="GMC">GMC</option>
-<option value="Honda">Honda</option>
-<option value="Hyundai">Hyundai</option>
-<option value="Infiniti">Infiniti</option>
-<option value="Jaguar">Jaguar</option>
-<option value="Jeep">Jeep</option>
-<option value="Kia">Kia</option>
-<option value="Lamborghini">Lamborghini</option>
-<option value="Land Rover">Land Rover</option>
-<option value="Lexus">Lexus</option>
-<option value="Lincoln">Lincoln</option>
-<option value="Maserati">Maserati</option>
-<option value="Mazda">Mazda</option>
-<option value="McLaren">McLaren</option>
-<option value="Mercedes-Benz">Mercedes-Benz</option>
-<option value="Mini">Mini</option>
-<option value="Mitsubishi">Mitsubishi</option>
-<option value="Nissan">Nissan</option>
-<option value="Porsche">Porsche</option>
-<option value="Ram">Ram</option>
-<option value="Rolls-Royce">Rolls-Royce</option>
-<option value="Subaru">Subaru</option>
-<option value="Tesla">Tesla</option>
-<option value="Toyota">Toyota</option>
-<option value="Volkswagen">Volkswagen</option>
-<option value="Volvo">Volvo</option>
-                    <!-- Add more options as needed -->
-                </select>
+          <div class="rule-section">
+            <h3 onclick="toggleRule(this)">Party Room Rental <i class="fas fa-chevron-down"></i></h3>
+            <div class="rule-content hidden">
+              <p><strong>Rooms:</strong> Gathering Place A or B (up to 40 people)</p>
+              <p><strong>Cost:</strong> $75 to rent, $250 deposit (cheques to MTCC 929 for A, 936 for B)</p>
+              <p><strong>Time:</strong> Ends at midnight, clean by 12:30 AM</p>
+              <h4>Easy Rules:</h4>
+              <ol>
+                <li>Up to 40 guests allowed by city rules.</li>
+                <li>Only residents can book the room.</li>
+                <li>You pay for any damage to the room or property.</li>
+                <li>Keep your guests well-behaved, or we’ll step in.</li>
+                <li>Pay $75 to rent and $250 deposit when booking. Deposit back in 3 days if no issues.</li>
+                <li>Give a guest list and car plates 1 day before, or the event’s off.</li>
+                <li>You cover any legal issues or injuries; we’re not responsible.</li>
+                <li>We don’t cover lost items or injuries.</li>
+                <li>No decorations on walls—damage comes out of your deposit or bill.</li>
+                <li>No tape, glue, nails, or pins on walls or ceiling.</li>
+                <li>Stay in the rented room; no other areas allowed.</li>
+                <li>You guide guests—no signs or open doors.</li>
+                <li>Get any permits (like for alcohol) yourself and show us before.</li>
+                <li>Cancel 7 days ahead, or pay $100.</li>
+                <li>No smoking inside.</li>
+                <li>No selling tickets; only family events like birthdays (no bachelor parties).</li>
+                <li>Clean up before your time ends.</li>
+                <li>No bookings on Christmas Eve, Christmas, New Year’s Eve, or New Year’s Day.</li>
+                <li>Keep furniture off the dance floor.</li>
+                <li>Guests park at P1 garage—not under daycare or recreation center (fire rules).</li>
+              </ol>
+              <p><strong>If You Stay Late:</strong> $100 fine until 1:30 AM, $200 after (1 AM is the latest).</p>
             </div>
-            
-            <!-- Vehicle Color -->
-            <div class="field">
-                <label for="vehicle-color">Vehicle Color:</label>
-                <select id="vehicle-color" required>
-                   <option value="">Select Vehicle Colour</option>
-<option value="Black">Black</option>
-<option value="White">White</option>
-<option value="Gray">Gray</option>
-<option value="Silver">Silver</option>
-<option value="Blue">Blue</option>
-<option value="Red">Red</option>
-<option value="Green">Green</option>
-<option value="Yellow">Yellow</option>
-<option value="Orange">Orange</option>
-<option value="Brown">Brown</option>
-<option value="Gold">Gold</option>
-<option value="Purple">Purple</option>
-<option value="Beige">Beige</option>
-<option value="Pink">Pink</option>
-<option value="Burgundy">Burgundy</option>
-<option value="Teal">Teal</option>
-<option value="Maroon">Maroon</option>
-<option value="Turquoise">Turquoise</option>
-                </select>
-            </div>
-            
-            <!-- Issue Date -->
-            <div class="field">
-                <label for="issue-date">Issue Date:</label>
-                <input type="date" id="issue-date" required>
-            </div>
-            
-            <!-- Expire Date -->
-            <div class="field">
-                <label for="expire-date">Expire Date:</label>
-                <input type="date" id="expire-date" required>
-            </div>
+          </div>
 
-            <!-- Submit Button -->
-            <button type="submit">Add Permit</button>
+          <div class="rule-section">
+            <h3 onclick="toggleRule(this)">Rainbow Lounge Rental <i class="fas fa-chevron-down"></i></h3>
+            <div class="rule-content hidden">
+              <p><strong>Room:</strong> Rainbow Lounge (up to 60 people)</p>
+              <p><strong>Cost:</strong> $150 (Mon-Thu) or $225 (Fri-Sun/holidays), $500 deposit, $25/hr security (min 4 hrs), $25 garbage (cheques to Rainbow Village)</p>
+              <p><strong>Time:</strong> Ends at midnight, clean by 12:30 AM</p>
+              <h4>Easy Rules:</h4>
+              <ol>
+                <li>Up to 60 guests allowed.</li>
+                <li>Only residents can book—no outsiders, or lose $500 and booking rights.</li>
+                <li>Pay rental, $500 deposit, and security fee when booking. Deposit back in 3 days if no issues.</li>
+                <li>You need a security guard: $25/hr (or $50/hr on holidays), at least 4 hrs, paid from start to cleanup.</li>
+                <li>Pay $25 for garbage; take it to your building’s trash room, or pay extra.</li>
+                <li>You clean up after the event.</li>
+                <li>Book 7 days to 6 months ahead. Cancel 48 hrs before, or lose your fee.</li>
+                <li>Give a guest list (max 60) 4 days before.</li>
+                <li>Guests park at P1 garage—not under daycare or recreation center (fire rules).</li>
+                <li>Security opens P1 door. You greet guests at stairs (no 3rd floor Building B entry, except seniors/disabled with notice).</li>
+              </ol>
+            </div>
+          </div>
+
+          <div class="rule-section">
+            <h3 onclick="toggleRule(this)">Elevator Booking <i class="fas fa-chevron-down"></i></h3>
+            <div class="rule-content hidden">
+              <p><strong>Use:</strong> Moving in/out, deliveries, renovations</p>
+              <p><strong>Fees:</strong></p>
+              <ul>
+                <li>Move In (Partial/Complete): $300 (Draft) + $50 (Cheque) - Max 3 hrs</li>
+                <li>Move Out (Complete): $300 (Draft) + $50 (Draft) - Max 3 hrs</li>
+                <li>Move Out (Partial): $300 (Draft) + $50 (Cheque) - Max 3 hrs</li>
+                <li>Deliveries: $300 (Cheque) - Max 4 hrs</li>
+                <li>Renovation: $300 (Cheque) - Max 2 hrs (Mon-Fri)</li>
+              </ul>
+              <p><strong>Note:</strong> No bookings on Sundays (except last Sunday of the month) or statutory holidays.</p>
+            </div>
+          </div>
+
+          <div class="rule-section">
+            <h3 onclick="toggleRule(this)">Recreation ID Card <i class="fas fa-chevron-down"></i></h3>
+            <div class="rule-content hidden">
+              <p><strong>Cost:</strong> Free for owners, $10 for tenants (2 photos, cheque or cash to Rainbow Village)</p>
+              <h4>Easy Rules:</h4>
+              <ol>
+                <li>Use the rec centre at your own risk.</li>
+                <li>Only use equipment inside; you pay if it breaks or someone gets hurt.</li>
+                <li>Pay for any damage or loss you or your guests cause.</li>
+                <li>Parents cover kids under 16—the same rules apply.</li>
+                <li>Break rules, and you lose rec centre access.</li>
+                <li>Bring your ID card every time, or you’ll be asked to leave.</li>
+              </ol>
+            </div>
+          </div>
+
+          <div class="rule-section">
+            <h3 onclick="toggleRule(this)">Parking Rules <i class="fas fa-chevron-down"></i></h3>
+            <div class="rule-content hidden">
+              <ul>
+                <li><strong>Visitor Parking:</strong> Visitors must park at the P1 visitor garage level.</li>
+                <li><strong>Prohibited Parking:</strong> Ground floor parking near the recreation center is prohibited per fire code.</li>
+                <li><strong>Daycare Parking:</strong> Reserved for management, daycare staff, contractors, and delivery drivers.</li>
+                <li><strong>Capacity:</strong> Parking is first-come, first-served.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="rule-section">
+            <h3 onclick="toggleRule(this)">Pet Management <i class="fas fa-chevron-down"></i></h3>
+            <div class="rule-content hidden">
+              <ul>
+                <li><strong>No Common Area Mess:</strong> Pets must not urinate or defecate in common areas.</li>
+                <li><strong>Clean-Up:</strong> Residents must clean up after pets immediately. Failure results in a $250 charge.</li>
+                <li><strong>Reporting:</strong> Report violations to gatehouse security or management.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="rule-section">
+            <h3 onclick="toggleRule(this)">Utility Conservation and Oil Disposal <i class="fas fa-chevron-down"></i></h3>
+            <div class="rule-content hidden">
+              <ul>
+                <li><strong>Energy Conservation:</strong> Use high-efficiency bulbs. Turn off lights when leaving.</li>
+                <li><strong>Water Conservation:</strong> Report leaky faucets immediately.</li>
+                <li><strong>Oil Disposal:</strong> Dispose of cooking oil in the oil collection drum outside the recycling room.</li>
+                <li><strong>Financial Impact:</strong> Higher utility use increases maintenance fees.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="rule-section">
+            <h3 onclick="toggleRule(this)">Community Guidelines <i class="fas fa-chevron-down"></i></h3>
+            <div class="rule-content hidden">
+              <h4>Easy Rules:</h4>
+              <ul>
+                <li>Do not leave packages at the gatehouse without approval.</li>
+                <li>No sitting, food, drink, bicycles, or roller blades in the Rainbow Bridge area.</li>
+                <li>No noise or nuisance disturbing others.</li>
+                <li>Recreation Centre hours: 9:00 AM to 11:00 PM.</li>
+                <li>Guests must be signed in by residents at gatehouse security.</li>
+              </ul>
+            </div>
+          </div>
         </div>
-    </div>
-</form>
+        <div class="permit-actions">
+          <button class="btn-primary" onclick="openModal('contacts')">Contact Us</button>
+        </div>
+      </div>
+    </section>
+  </main>
 
-        <!-- Search Boxes -->
-       
-<button id="search-tool-btn" class="search-tool-btn">🔍 Search Tools</button>
-
-<!-- Search Tool Container -->
-<div id="search-tool-container" class="search-tool-container">
-    <div>
-        <h3>Search Permits:</h3>
-        <input type="text" id="search-permits" placeholder="Search by Permit Number, Unit, Visitor Name">
-        <button onclick="searchPermits()">Search</button>
-    </div>
-
-    <div>
-        <h3>Search Remaining Permits for a Unit in Current Month:</h3>
-        <input type="text" id="unit-search" placeholder="Enter Unit Number">
-        <button onclick="searchRemainingPermits()">Search</button>
-    </div>
-</div>
-<!-- New Updates Button -->
-<button id="new-updates-btn" class="shiny-btn">🔔</button>
-
-<!-- New Updates Modal -->
-<div id="new-updates-modal" class="updates-modal">
+  <div id="modal" class="modal hidden">
     <div class="modal-content">
-        <span class="close-button">&times;</span>
-        <h2>Version 0.03</h2>
-        <ul>
-            <li><strong>Fully Updated:</strong> The system has been comprehensively refined to ensure optimal performance and reliability.</li>
-            <li><strong>Report Issues:</strong> If you encounter any bugs or issues, please report them to senior staff for prompt resolution.</li>
-        </ul>
+      <div class="modal-header">
+        <h2 id="modalTitle"></h2>
+        <button onclick="closeModal()"><i class="fas fa-times"></i></button>
+      </div>
+      <div id="modalBody" class="modal-body"></div>
     </div>
-</div>
+  </div>
 
+  <div id="toast" class="toast hidden"></div>
 
-
-
-<div class="hamburger-menu">
-    <button id="hamburger-toggle">☰</button>
-    <div class="hamburger-content">
-        <button id="info-button">About</button>
-        <button id="guards-info-button">Show Guard Details</button>
-        <button id="generate-report-button">Generate Monthly Report</button>
-		   <button id="export-btn">Export to Excel</button>
-		<button onclick="location.href='index2.html'">User Guide</button>
-    </div>
-</div>
-
-
-
-
-<!-- Info Modal -->
-<div id="info-modal" class="modal">
-    <div class="modal-content">
-        <span class="close-button">&times;</span>
-        <h2 class="modal-title">Platform Information</h2>
-        <p class="copyright">&copy; 2025 Gatehouse. All Rights Reserved.</p>
-
-        <div class="section">
-            <h3>Platform Overview</h3>
-            <p>This platform serves as a temporary offline solution specifically designed for managing parking operations at Rainbow Lounge. It is still in its testing phase, and we appreciate your understanding as we fine-tune the system. If you encounter any errors or issues, please promptly report them to Supervisor Melbin So that the problem can be addressed and resolved as quickly as possible.</p>
-        </div>
-
-        <div class="section">
-            <h3>Security & Compliance</h3>
-            <p>We have implemented robust security protocols to protect all data and ensure the integrity of the system. We encourage all users to operate the platform responsibly and in accordance with applicable regulations.</p>
-        </div>
-
-        <div class="section">
-            <p>This website has been created by <strong>Mr. Singh</strong>, who retains full copyright ownership of the platform. All rights associated with this website have been transferred to Gatehouse for operational purposes.</p>
-        </div>
-
-        <div class="section">
-            <h3>Getting Assistance</h3>
-            <p>If you require guidance or assistance with using the platform, please refer to the <a href="index2.html">User Guide</a>, which provides detailed instructions on how to navigate and utilize all features. For information regarding the platform's terms of use and copyright, please review the <a href="legal-page.html">Terms & Conditions</a> below.</p>
-        </div>
-
-        <div class="security-logos">
-            <h4>Security Notice</h4>
-            <div class="logo-container">
-                <img src="file:///C:/website/Security Logo 1.jpg" alt="Security Logo 1" class="security-logo">
-               
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Chatbox HTML -->
-<div id="chatbox-container">
-    <div id="chatbox-header">
-        <span>Chatbot</span>
-        <button id="chatbox-close-btn">×</button>
-    </div>
-    <div id="chatbox-body">
-        <div id="chatbox-messages"></div>
-    </div>
-    <div id="chatbox-input-container">
-        <input type="text" id="chatbox-input" placeholder="Type your message...">
-        <button id="chatbox-send-btn">Send</button>
-    </div>
-</div>
-<button id="chatbox-toggle-btn">💬</button>
-
-
-           
-        </div> <button id="toggle-table-btn">Show/Hide Permit Records Table</button>
-
-        <!-- Permit Table -->
-        <table id="permit-table" border="1">
-            <thead>
-                <tr>
-                    <th>Permit No.</th>
-                    <th>Unit Number</th>
-                    <th>Visitor Name</th>
-                    <th>License Plate No</th>
-                    <th>Vehicle Make</th>
-                    <th>Vehicle Color</th>
-                    <th>Officer Name</th>
-                    <th>Issue Date</th>
-                    <th>Expire Date</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-
-     
-    </div><script src="script.js"></script>
-	<div id="guards-info-modal" class="modal">
-    <div class="modal-content">
-        <span class="close-button">&times;</span>
-        <h2>Security Personnel Details</h2>
-        <p>The following is the detailed schedule and roles of our security personnel:</p>
-        <table border="1" style="width: 100%; border-collapse: collapse; text-align: left;">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Role</th>
-                    <th>Shift</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Melbin</td>
-                    <td>Supervisor</td>
-                    <td>Morning (08:00 - 16:00)</td>
-                    <td>Permanent Full-Time</td>
-                </tr>
-                <tr>
-                    <td>Jagroop Singh</td>
-                    <td>Security Officer</td>
-                    <td>Night (00:00 - 08:00)</td>
-                    <td>Permanent Full-Time</td>
-                </tr>
-                <tr>
-                    <td>Kartik</td>
-                    <td>Security Officer</td>
-                    <td>Afternoon (16:00 - 00:00)</td>
-                    <td>Permanent Full-Time</td>
-                </tr>
-                <tr>
-                    <td>Zamil</td>
-                    <td>Security Officer</td>
-                    <td>Night (00:00 - 08:00)</td>
-                    <td>Part-Time Permanent</td>
-                </tr>
-                <tr>
-                    <td>Daniyal</td>
-                    <td>Security Officer</td>
-                    <td>Day (08:00 - 20:00)</td>
-                    <td>Part-Time Permanent</td>
-                </tr>
-                <tr>
-                    <td>Karan</td>
-                    <td>Patrol Guard</td>
-                    <td>Evening (17:00 - 01:00)</td>
-                    <td>Part-Time Permanent</td>
-                </tr>
-                <tr>
-                    <td>Abiy</td>
-                    <td>Patrol Guard</td>
-                    <td>Evening (17:00 - 01:00)</td>
-                    <td>Permanent Full-Time</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="report.js"></script>
-
-
-    <script>
-document.getElementById("chatbox-toggle-btn").addEventListener("click", function () {
-    document.getElementById("chatbox-container").classList.toggle("active");
-});
-
-document.getElementById("chatbox-close-btn").addEventListener("click", function () {
-    document.getElementById("chatbox-container").classList.remove("active");
-});
-
-document.getElementById("chatbox-send-btn").addEventListener("click", sendMessage);
-
-document.getElementById("chatbox-input").addEventListener("keypress", function (e) {
-    if (e.key === "Enter") sendMessage();
-});
-
-function sendMessage() {
-    const input = document.getElementById("chatbox-input");
-    const message = input.value.trim();
-    if (message === "") return;
-
-    addMessage("user", message);
-    input.value = "";
-
-    setTimeout(async () => {
-        const botResponse = await getBotResponse(message);
-        addMessage("bot", botResponse);
-    }, 500);
-}
-
-function addMessage(sender, message) {
-    const messagesContainer = document.getElementById("chatbox-messages");
-    const messageElement = document.createElement("div");
-    messageElement.classList.add("message", sender);
-    messageElement.textContent = message;
-    messagesContainer.appendChild(messageElement);
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-}
-
-async function getBotResponse(message) {
-    const lowerCaseMessage = message.toLowerCase();
-
-    const responses = {
-        "hi": "Hello! How can I assist you today?",
-        "hello": "Hi there! Need any help?",
-        "how are you": "I'm just a bot, but I'm here to assist you!",
-        "thank you": "You're welcome! Let me know if you need anything else.",
-        "thanks": "Glad to help! Let me know if there's anything else.",
-        "help": "I can assist with permits, reports, and general queries. What do you need help with?",
-        "permit add": "To add a permit, fill out the form and click 'Add Permit'.",
-        "permit edit": "Click 'Edit' next to the permit, update the details, and save.",
-        "permit delete": "Click 'Delete' next to a permit and confirm deletion.",
-        "permit search": "Use the 'Search Tools' to find permits by unit or visitor name.",
-        "unit": "A unit identifies the property and can issue up to 7 permits per month.",
-        "visitor": "The visitor name is required for issuing a permit.",
-        "license plate": "The license plate is required to identify the vehicle.",
-        "vehicle make": "Select the vehicle's brand, like Toyota or Honda.",
-        "vehicle color": "Select the vehicle's color from the dropdown.",
-        "officer": "Select the security officer's name from the dropdown when issuing a permit.",
-        "issue date": "The issue date must be in YYYY-MM-DD format.",
-        "expire date": "The expire date must be in YYYY-MM-DD format.",
-        "export": "Click 'Export to Excel' to save all permit records.",
-        "user guide": "Click 'User Guide' in the menu for instructions on using the system.",
-        "about": "This is an offline permit management system for Gatehouse security.",
-        "security": "Click 'Show Guard Details' to view security personnel information.",
-        "report": "Click 'Generate Monthly Report' to create a report.",
-        "what is your name": "I'm PermitBot, your assistant for permit management!",
-        "who created you": "I was created by Mr. Singh for the Gatehouse permit system.",
-        "what can you do": "I can assist with permits, reports, and general system questions.",
-        "time": `The current time is: ${new Date().toLocaleTimeString()}.`,
-        "date": `Today's date is: ${new Date().toLocaleDateString()}.`,
-        "weather": "I'm an offline chatbot, so I can't check the weather!",
-        "joke": "Why do programmers prefer dark mode? Because light attracts bugs! 😄"
-    };
-
-    for (const key in responses) {
-        if (lowerCaseMessage.includes(key)) {
-            return responses[key];
-        }
+  <script defer>
+    function showSection(sectionId) {
+      document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
+      document.getElementById(sectionId).classList.remove('hidden');
+      document.querySelector('.nav-menu').classList.remove('active');
     }
 
-    return await fetchOnlineResponse(message);
-}
-
-async function fetchOnlineResponse(message) {
-    try {
-        const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(message)}&langpair=en|en`);
-        const data = await response.json();
-        return data.responseData.translatedText || "I'm not sure about that. Try asking about permits, reports, or security.";
-    } catch (error) {
-        return "I'm not sure about that. Try asking about permits, reports, or security.";
+    function toggleNav() {
+      document.querySelector('.nav-menu').classList.toggle('active');
     }
-}
 
-	document.getElementById('search-tool-btn').addEventListener('click', function() {
-    var container = document.getElementById('search-tool-container');
-    container.classList.toggle('active');
-});
-
-document.addEventListener("DOMContentLoaded", function () {
-
-    // Get the modal element
-    const modal = document.getElementById("new-updates-modal");
-
-    // Open the modal when the bell button is clicked
-    document.getElementById("new-updates-btn").addEventListener("click", function () {
-        modal.style.display = "block";  // Show the modal
-    });
-
-    // Close the modal when the close button is clicked
-    document.querySelector(".close-button").addEventListener("click", function () {
-        modal.style.display = "none";  // Hide the modal
-    });
-
-    // Close the modal if clicking outside the modal
-    window.addEventListener("click", function (event) {
-        if (event.target === modal) {
-            modal.style.display = "none";  // Hide the modal if clicking outside
-        }
-    });
-});
-
-	// Smoothly toggle the visibility of the search tools
-document.getElementById("search-tool-btn").addEventListener("click", function () {
-    const searchToolContainer = document.getElementById("search-tool-container");
-    searchToolContainer.classList.toggle("open");
-});
-
-
-	const hamburgerToggle = document.getElementById('hamburger-toggle');
-const hamburgerContent = document.querySelector('.hamburger-content');
-
-// Toggle the visibility of the menu
-hamburgerToggle.addEventListener('click', () => {
-    const isVisible = hamburgerContent.style.display === 'block';
-    hamburgerContent.style.display = isVisible ? 'none' : 'block';
-});
-
-// Close menu when clicking outside
-window.addEventListener('click', (e) => {
-    if (!hamburgerToggle.contains(e.target) && !hamburgerContent.contains(e.target)) {
-        hamburgerContent.style.display = 'none';
+    function toggleRule(header) {
+      const content = header.nextElementSibling;
+      content.classList.toggle('hidden');
+      const icon = header.querySelector('i');
+      icon.classList.toggle('fa-chevron-down');
+      icon.classList.toggle('fa-chevron-up');
     }
-});
 
-	const guardsInfoButton = document.getElementById("guards-info-button");
-const guardsInfoModal = document.getElementById("guards-info-modal");
-const closeGuardsInfoButton = guardsInfoModal.querySelector(".close-button");
-
-// Show the modal
-guardsInfoButton.addEventListener("click", () => {
-    guardsInfoModal.style.display = "block";
-});
-
-// Close the modal
-closeGuardsInfoButton.addEventListener("click", () => {
-    guardsInfoModal.style.display = "none";
-});
-
-// Close the modal when clicking outside it
-window.addEventListener("click", (event) => {
-    if (event.target === guardsInfoModal) {
-        guardsInfoModal.style.display = "none";
-    }
-});
-
-// Info Modal Script
-const infoButton = document.getElementById("info-button");
-const infoModal = document.getElementById("info-modal");
-const closeButton = infoModal.querySelector(".close-button");
-
-// Show the modal
-infoButton.addEventListener("click", () => {
-    infoModal.style.display = "block";
-});
-
-// Close the modal
-closeButton.addEventListener("click", () => {
-    infoModal.style.display = "none";
-});
-
-// Close the modal when clicking outside of it
-window.addEventListener("click", (event) => {
-    if (event.target === infoModal) {
-        infoModal.style.display = "none";
-    }
-});
-
-	// Toggle visibility of the permit records table
-document.getElementById("toggle-table-btn").addEventListener("click", function () {
-    const table = document.getElementById("permit-table");
-    if (table.style.display === "none" || table.style.display === "") {
-        table.style.display = "block";  // Show the table
-    } else {
-        table.style.display = "none";  // Hide the table
-    }
-});
-        let db;
-        let editMode = false;
-        let currentPermitNumber = null;
-
-        // Open or create the database
-        const request = indexedDB.open("permitDB", 1);
-
-        request.onupgradeneeded = function (event) {
-            db = event.target.result;
-            if (!db.objectStoreNames.contains("permits")) {
-                const permitsStore = db.createObjectStore("permits", { keyPath: "permitNumber" });
-                permitsStore.createIndex("unitNumber", "unitNumber", { unique: false });
-            }
-        };
-
-        request.onerror = function (event) {
-            alert("Error opening IndexedDB: " + event.target.errorCode);
-        };
-
-        request.onsuccess = function (event) {
-            db = event.target.result;
-            console.log("Database initialized successfully.");
-            getPermits(); // Fetch permits when DB is ready
-            checkAndResetPermitCount(); // Check and reset the permit count at the start of each month
-            setInterval(checkAndResetPermitCount, 600000); // Check every 10 minutes
-        };
-
-        // Add permit to the database
-        function addPermit(permit) {
-            const transaction = db.transaction("permits", "readwrite");
-            const store = transaction.objectStore("permits");
-            store.add(permit);
-            transaction.oncomplete = function () {
-                console.log("Permit added successfully.");
-                getPermits(); // Refresh the table after adding
-            };
-            transaction.onerror = function (event) {
-                alert("Error adding permit: " + event.target.errorCode);
-            };
-        }
-
-        // Get all permits from IndexedDB
-        function getPermits() {
-            const transaction = db.transaction("permits", "readonly");
-            const store = transaction.objectStore("permits");
-            const request = store.getAll();
-
-            request.onsuccess = function () {
-                displayPermits(request.result);
-            };
-            request.onerror = function (event) {
-                console.error("Error retrieving permits: ", event.target.errorCode);
-            };
-        }
-
-        // Display the permits in the table
-       function displayPermits(permits) {
-    const tableBody = document.getElementById("permit-table").getElementsByTagName("tbody")[0];
-    tableBody.innerHTML = ""; // Clear the table body
-
-    // Sort permits in descending order by Permit Number (or any other field you prefer)
-    permits.sort((a, b) => b.permitNumber - a.permitNumber);
-
-    permits.forEach((permit) => {
-        const row = tableBody.insertRow();
-        row.innerHTML = `
-            <td>${permit.permitNumber}</td>
-            <td>${permit.unitNumber}</td>
-            <td>${permit.visitorName}</td>
-            <td>${permit.licensePlateNo}</td>
-            <td>${permit.vehicleMake}</td>
-            <td>${permit.vehicleColor}</td>
-            <td>${permit.officerName}</td>
-            <td>${permit.issueDate}</td>
-            <td>${permit.expireDate}</td>
-            <td>
-                <button onclick="editPermit('${permit.permitNumber}')">Edit</button>
-                <button onclick="deletePermit('${permit.permitNumber}')">Delete</button>
-            </td>
+    function openModal(type) {
+      const modal = document.getElementById('modal');
+      const title = document.getElementById('modalTitle');
+      const body = document.getElementById('modalBody');
+      modal.classList.remove('hidden');
+      if (type === 'about') {
+        title.textContent = 'About Rainbow Village';
+        body.innerHTML = `
+          <p>Rainbow Village is a vibrant community committed to fostering a safe, enjoyable, and respectful environment for all residents.</p>
+          <p>These rules ensure harmony and fairness across our shared spaces.</p>
         `;
+      } else if (type === 'contacts') {
+        title.textContent = 'Contacts';
+        body.innerHTML = `
+          <ul>
+            <li><strong>Aidin Gelal (Super, 2466):</strong> 416-912-0500</li>
+            <li><strong>Sameer (Super, 2460):</strong> 647-703-1822</li>
+            <li><strong>Pristine Property (snow/landscaping):</strong> 416-737-8978</li>
+            <li><strong>Garrison Plumbing:</strong> 416-817-6902</li>
+            <li><strong>March Elevators (2466):</strong> 416-533-1135</li>
+            <li><strong>Thyssenkrup Elevators (2460):</strong> 416-291-2000</li>
+            <li><strong>Gemeni Entry (gates):</strong> 647-778-0965</li>
+            <li><strong>Graham Alarm (2460: 50057169, 2466: 50057168, Passcode 1902):</strong> 905-897-8822</li>
+            <li><strong>SMS Emergency:</strong> 416-360-1902</li>
+            <li><strong>Toronto Public Health:</strong> 416-392-1250</li>
+          </ul>
+          <p>For emergencies or urgent issues, contact the appropriate number above.</p>
+        `;
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('modal').classList.add('hidden');
+    }
+
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = `toast ${type}`;
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.add('hidden'), 3000);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const ruleSections = document.querySelectorAll('.rule-section');
+      ruleSections.forEach((section, index) => {
+        if (index !== 0) {
+          section.querySelector('.rule-content').classList.add('hidden');
+          section.querySelector('i').classList.remove('fa-chevron-up');
+          section.querySelector('i').classList.add('fa-chevron-down');
+        }
+      });
     });
-}
-		// Search Permits by Permit Number, Unit, or Visitor Name
-    function searchPermits() {
-    const searchInput = document.getElementById("search-permits").value.toLowerCase();
-    const transaction = db.transaction("permits", "readonly");
-    const store = transaction.objectStore("permits");
-    const request = store.getAll();
-
-    request.onsuccess = function () {
-        const results = request.result.filter(permit => {
-            // Convert each field in the permit object to a string and check if it includes the search input
-            return Object.values(permit).some(field => 
-                String(field).toLowerCase().includes(searchInput)
-            );
-        });
-
-        displayPermits(results); // Reuse displayPermits to show the filtered results
-    };
-
-    request.onerror = function () {
-        alert("Error searching permits.");
-    };
-}
-
-
-    // Search Remaining Permits for a Unit in the Current Month
-    function searchRemainingPermits() {
-        const unitNumber = document.getElementById("unit-search").value.toUpperCase();
-        const transaction = db.transaction("permits", "readonly");
-        const store = transaction.objectStore("permits");
-        const index = store.index("unitNumber");
-        const request = index.getAll(unitNumber);
-
-        request.onsuccess = function () {
-            const currentMonth = new Date().getMonth();
-            const permitsThisMonth = request.result.filter(permit => {
-                const permitDate = new Date(permit.issueDate);
-                return permitDate.getMonth() === currentMonth;
-            });
-
-            const remainingPermits = 7 - permitsThisMonth.length;
-            alert(`Remaining permits for unit ${unitNumber}: ${remainingPermits}`);
-        };
-
-        request.onerror = function () {
-            alert("Error retrieving permits for the unit.");
-        };
-    }
-
-
-        // Delete a permit from IndexedDB
-function deletePermit(permitNumber) {
-    const confirmDelete = confirm("Are you sure you want to delete this permit?");
-    if (!confirmDelete) {
-        return; // Exit if user cancels the action
-    }
-
-    const transaction = db.transaction("permits", "readwrite");
-    const store = transaction.objectStore("permits");
-    store.delete(permitNumber);
-    transaction.oncomplete = function () {
-        console.log("Permit deleted successfully.");
-        getPermits(); // Refresh the table after deletion
-    };
-    transaction.onerror = function (event) {
-        alert("Error deleting permit: " + event.target.errorCode);
-    };
-}
-
-        // Edit a permit
-        function editPermit(permitNumber) {
-            const transaction = db.transaction("permits", "readonly");
-            const store = transaction.objectStore("permits");
-            const request = store.get(permitNumber);
-
-            request.onsuccess = function () {
-                const permit = request.result;
-
-                // Populate the form with the permit's data
-                document.getElementById("unit-number").value = permit.unitNumber;
-                document.getElementById("visitor-name").value = permit.visitorName;
-                document.getElementById("license-plate-no").value = permit.licensePlateNo;
-                document.getElementById("vehicle-make").value = permit.vehicleMake;
-                document.getElementById("vehicle-color").value = permit.vehicleColor;
-                document.getElementById("officer-name").value = permit.officerName;
-                document.getElementById("issue-date").value = permit.issueDate;
-                document.getElementById("expire-date").value = permit.expireDate;
-
-                // Enable edit mode
-                editMode = true;
-                currentPermitNumber = permitNumber;
-            };
-
-            request.onerror = function () {
-                alert("Error retrieving permit data for editing.");
-            };
-        }
-
-        // Get the last permit number from localStorage or IndexedDB
-        function getLastPermitNumber() {
-            return localStorage.getItem("lastPermitNumber") || 0;
-        }
-
-        // Save the last permit number to localStorage
-        function saveLastPermitNumber(number) {
-            localStorage.setItem("lastPermitNumber", number);
-        }
-
-        // Generate a sequential permit number
-        function generatePermitNumber() {
-            let lastPermitNumber = parseInt(getLastPermitNumber()) || 0;
-            const newPermitNumber = (lastPermitNumber + 1).toString().padStart(4, '0');
-            saveLastPermitNumber(newPermitNumber);  // Update last permit number
-            return newPermitNumber;
-        }
-
-        // Check if the unit has issued more than 7 permits in the current month
-        function checkPermitLimit(unitNumber, callback) {
-            const transaction = db.transaction("permits", "readonly");
-            const store = transaction.objectStore("permits");
-            const index = store.index("unitNumber");
-            const request = index.getAll(unitNumber);
-
-            request.onsuccess = function () {
-                const currentMonth = new Date().getMonth();
-                const permitsThisMonth = request.result.filter(permit => {
-                    const permitDate = new Date(permit.issueDate);
-                    return permitDate.getMonth() === currentMonth;
-                });
-
-                if (permitsThisMonth.length >= 7) {
-                    callback(false); // Permit limit reached
-                } else {
-                    callback(true); // Permit limit not reached
-                }
-            };
-
-            request.onerror = function () {
-                alert("Error checking permit limit.");
-                callback(false);
-            };
-        }
-
-        // Form submission handler
-        document.getElementById("permit-form").addEventListener("submit", function (event) {
-    event.preventDefault(); // Prevent default form submission
-
-    const confirmSubmit = confirm("Are you sure you want to submit this permit?");
-    if (!confirmSubmit) {
-        return; // Exit if user cancels the action
-    }
-
-    const unitNumber = document.getElementById("unit-number").value.toUpperCase();
-    const visitorName = document.getElementById("visitor-name").value;
-    const licensePlateNo = document.getElementById("license-plate-no").value;
-    const vehicleMake = document.getElementById("vehicle-make").value;
-    const vehicleColor = document.getElementById("vehicle-color").value;
-    const officerName = document.getElementById("officer-name").value;
-    const issueDate = document.getElementById("issue-date").value;
-    const expireDate = document.getElementById("expire-date").value;
-
-    // Check unit number format
-    const unitPattern = /^\d{4}\/[A-Z]$/;
-    if (!unitPattern.test(unitNumber)) {
-        alert("Unit number must be in the format '1234/A'.");
-        return;
-    }
-
-    if (editMode) {
-        // Update existing permit logic
-        const transaction = db.transaction("permits", "readwrite");
-        const store = transaction.objectStore("permits");
-        const request = store.get(currentPermitNumber);
-
-        request.onsuccess = function () {
-            const permit = request.result;
-
-            permit.unitNumber = unitNumber;
-            permit.visitorName = visitorName;
-            permit.licensePlateNo = licensePlateNo;
-            permit.vehicleMake = vehicleMake;
-            permit.vehicleColor = vehicleColor;
-            permit.officerName = officerName;
-            permit.issueDate = issueDate;
-            permit.expireDate = expireDate;
-
-            const updateRequest = store.put(permit);
-
-            updateRequest.onsuccess = function () {
-                console.log("Permit updated successfully.");
-                getPermits();
-                resetForm();
-            };
-
-            updateRequest.onerror = function () {
-                alert("Error updating permit.");
-            };
-        };
-
-        request.onerror = function () {
-            alert("Error retrieving permit for editing.");
-        };
-    } else {
-        // Add new permit logic
-        checkPermitLimit(unitNumber, function (isAllowed) {
-            if (isAllowed) {
-                const permitNumber = generatePermitNumber();
-                const newPermit = {
-                    permitNumber,
-                    unitNumber,
-                    visitorName,
-                    licensePlateNo,
-                    vehicleMake,
-                    vehicleColor,
-                    officerName,
-                    issueDate,
-                    expireDate,
-                };
-
-                addPermit(newPermit);
-                resetForm();
-            } else {
-                alert("This unit has already reached the monthly limit of 7 permits.");
-            }
-        });
-    }
-});
-
-
-        // Reset the form and edit mode
-        function resetForm() {
-            document.getElementById("permit-form").reset();
-            editMode = false;
-            currentPermitNumber = null;
-        }
-		 // Export Permits to Excel
-    document.getElementById("export-btn").addEventListener("click", function () {
-        const transaction = db.transaction("permits", "readonly");
-        const store = transaction.objectStore("permits");
-        const request = store.getAll();
-
-        request.onsuccess = function () {
-            const data = request.result.map(permit => ({
-                "Permit No.": permit.permitNumber,
-                "Unit Number": permit.unitNumber,
-                "Visitor Name": permit.visitorName,
-                "License Plate No": permit.LicensePlateNo,
-                "Vehicle Make": permit.vehicleMake,
-                "Vehicle Color": permit.vehicleColor,
-                "Officer Name": permit.officerName,
-                "Issue Date": permit.issueDate,
-                "Expire Date": permit.expireDate,
-            }));
-
-            const worksheet = XLSX.utils.json_to_sheet(data);
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "Permits");
-
-            XLSX.writeFile(workbook, "PermitRecords.xlsx");
-        };
-
-        request.onerror = function () {
-            alert("Error exporting permits.");
-        };
-    });
-    </script>
+  </script>
 </body>
 </html>
